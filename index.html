@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Holy Trinity App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function showSection(section) {
+            document.querySelectorAll('section').forEach(function(sec) {
+                sec.style.display = 'none';
+            });
+            document.getElementById(section).style.display = 'block';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('home');
+        });
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showSection('home')">Home</a>
+        <a href="#" onclick="showSection('miracles')">Miracles</a>
+        <a href="#" onclick="showSection('teachings')">Teachings</a>
+        <a href="#" onclick="showSection('search')">Search</a>
+    </nav>
+    
+    <section id="home">
+        <h1>Welcome to the Holy Trinity Web App</h1>
+        <div class="holy-trinity">
+            <div class="holy-figure">
+                <h2>The Father</h2>
+                <img src="static/The_Father.jpeg" alt="The Father">
+            </div>
+            <div class="holy-figure">
+                <h2>Jesus Christ</h2>
+                <img src="static/Jesus_Christ.jpeg" alt="Jesus Christ">
+            </div>
+            <div class="holy-figure">
+                <h2>The Holy Spirit</h2>
+                <img src="static/The_Holy_Spirit.jpeg" alt="The Holy Spirit">
+            </div>
+        </div>
+    </section>
+
+    <section id="miracles">
+        <h1>Manage Miracles</h1>
+        <form action="/add_miracle" method="POST">
+            <label for="testament">Testament:</label>
+            <input type="text" id="testament" name="testament" required>
+            <label for="book">Book:</label>
+            <input type="text" id="book" name="book">
+            <label for="verse">Verse:</label>
+            <input type="text" id="verse" name="verse">
+            <label for="miracle_type">Miracle Type:</label>
+            <input type="text" id="miracle_type" name="miracle_type" required>
+            <label for="summary">Summary:</label>
+            <input type="text" id="summary" name="summary">
+            <button type="submit">Add Miracle</button>
+        </form>
+        
+        <h2>Example Miracles</h2>
+        <ul>
+            <li>Testament: New Testament, Book: John, Verse: 2:1-11, Miracle Type: Transformation, Summary: Jesus turned water into wine</li>
+            <li>Testament: Old Testament, Book: Exodus, Verse: 14:19-31, Miracle Type: Deliverance, Summary: God parted the Red Sea</li>
+        </ul>
+
+        <h2>Existing Miracles</h2>
+        <ul>
+        {% for miracle in miracles %}
+            <li>{{ miracle[0] }}: {{ miracle[1] }} - {{ miracle[2] }} ({{ miracle[3] }}) - {{ miracle[4] }}</li>
+        {% endfor %}
+        </ul>
+    </section>
+
+    <section id="teachings">
+        <h1>Manage Teachings</h1>
+        <form action="/add_teaching" method="POST">
+            <label for="testament">Testament:</label>
+            <input type="text" id="testament" name="testament" required>
+            <label for="book">Book:</label>
+            <input type="text" id="book" name="book">
+            <label for="verse">Verse:</label>
+            <input type="text" id="verse" name="verse">
+            <label for="main_message">Main Message:</label>
+            <input type="text" id="main_message" name="main_message" required>
+            <label for="summary">Summary:</label>
+            <input type="text" id="summary" name="summary">
+            <button type="submit">Add Teaching</button>
+        </form>
+
+        <h2>Example Teachings</h2>
+        <ul>
+            <li>Testament: New Testament, Book: Matthew, Verse: 5:3-12, Main Message: Beatitudes, Summary: Jesus' teachings on blessings</li>
+            <li>Testament: Old Testament, Book: Proverbs, Verse: 3:5-6, Main Message: Trust in the Lord, Summary: Guidance on trusting God</li>
+        </ul>
+        
+        <h2>Existing Teachings</h2>
+        <ul>
+        {% for teaching in teachings %}
+            <li>{{ teaching[0] }}: {{ teaching[1] }} - {{ teaching[2] }} ({{ teaching[3] }}) - {{ teaching[4] }}</li>
+        {% endfor %}
+        </ul>
+    </section>
+
+    <section id="search">
+        <h1>Search For Miracles or Teachings</h1>
+        <form action="/search" method="GET">
+            <label for="testament">Testament:</label>
+            <input type="text" id="testament" name="testament" required>
+            <label for="book">Book:</label>
+            <input type="text" id="book" name="book" required>
+            <label for="verse">Verse:</label>
+            <input type="text" id="verse" name="verse" required>
+            <button type="submit">Search</button>
+        </form>
+        
+        <h2>Search Examples of Miracles or Teachings</h2>
+        <ul>
+            <li>Search this: New Testament, John, 2:1-11</li>
+            <li>Search this: Old Testament, Exodus, 14:19-31</li>
+        </ul>
+
+        <h2>Search Results</h2>
+        <ul>
+        {% for result in results %}
+            <li>
+                <strong>Testament:</strong> {{ result.testament }} <br>
+                <strong>Book:</strong> {{ result.book }} <br>
+                <strong>Verse:</strong> {{ result.verse }} <br>
+                <strong>Miracle Type/Main Message:</strong> {{ result.type_message }} <br>
+                <strong>Summary:</strong> {{ result.summary }}
+            </li>
+        {% endfor %}
+        </ul>
+    </section>
+</body>
+</html>
+
